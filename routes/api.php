@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\TourController;
 use App\Http\Controllers\Api\V1\TravelController;
 use Illuminate\Http\Request;
@@ -24,4 +25,8 @@ Route::get('/travels', [TravelController::class, 'index']);
 
 Route::get('travels/{travel:slug}/tours', [TourController::class, 'index']);
 
-Route::post('/travels', [TravelController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/travels', [TravelController::class, 'store']);
+});
+
+Route::post('login', LoginController::class);
