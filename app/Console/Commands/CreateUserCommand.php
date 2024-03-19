@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,22 +30,21 @@ class CreateUserCommand extends Command
      */
     public function handle()
     {
-        // Receive user input into the user array
-        $user['name'] = $this->ask('Name of the new user');
-        $user['email'] = $this->ask('Email of the new user');
-        $user['password'] = $this->secret('Password of the new user');
+        // ask user for their credentials and store in user array
+        $user['name'] = $this->ask('enter username');
+        $user['email'] = $this->ask('enter email');
+        $user['password'] = $this->secret('enter password');
 
 
-        // Assign the user a role
-        $roleName = $this->choice('Role of the new user', ['admin', 'editor'], 1);
+        // ask user their role and check if it is a valid role
+        $roleName = $this->choice('select user role', ['admin', 'editor'], default: 1);
+
         $role = Role::where('name', $roleName)->first();
-
         if(!$role) {
-            $this->error('Role not found');
+            $this->error('role not found');
 
             return -1;
         }
-
 
         // data validation
         $validator = Validator::make($user, [
@@ -62,16 +61,14 @@ class CreateUserCommand extends Command
             return -1;
         }
 
-
-        // Hash password, create a new user and and populate the pivot table
-        DB::transaction(function() use($user, $role) {
+        // create a new user 
+        DB::transaction(function() use ($user, $role) {
             $user['password'] = Hash::make($user['password']);
             $newUser = User::create($user);
             $newUser->roles()->attach($role->id);
         });
 
-
-        $this->info('User '.$user['email']. ' created successfully');
+        $this->info('user '.$user['email']. ' created successfully');
 
         return 0;
     }
