@@ -15,13 +15,14 @@ class TravelController extends Controller
 
     public function index(Request $request)
     {
-        // http://127.0.0.1:8000/api/v1/travels?page=2&page_size=2 -> Request Example
         $travels = Travel::query()->where('is_public', true)->paginate( $request->page_size ?? 15);
-
-
         return TravelResource::collection($travels);
     }
 
+    /*
+        By calling the validated() method on the request object, Laravel will automatically
+        validate the incoming request data against the rules defined in the corresponding for request class
+    */
     public function store(TravelRequest $request)
     {
         $travel = Travel::create($request->validated());
@@ -29,11 +30,4 @@ class TravelController extends Controller
         return new TravelResource($travel);
     }
 
-
-    /*
-
-        By calling the validated() method on the $request object,
-        Laravel will automatically validate the incoming request data against the rules defined in the corresponding form request class.
-
-    */
 }

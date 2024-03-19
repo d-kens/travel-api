@@ -15,7 +15,6 @@ class TourController extends Controller
          * Example request to this endpoint
             http://127.0.0.1:8000/api/v1/{slug}/tours?dateFrom=2023-06-01&dateTo=2023-06-91&priceFrom=99&priceTo=500&sortBy=price&sortOrder=asc
         */
-
         $tours =  $travel->tours()
             ->when($request->priceFrom, function ($query) use ($request) {
                 $query->where('price', '>=', $request->priceFrom * 100);
