@@ -27,7 +27,7 @@ class TourListTest extends TestCase
         $tour = Tour::factory()->create(['travel_id' => $travel->id]);
 
 
-        $response = $this->get('/api/v1/travels/' .$travel->slug.'/tours');
+        $response = $this->get('/api/travels/' .$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'data');
@@ -43,7 +43,7 @@ class TourListTest extends TestCase
             'price' => 123.45
         ]);
 
-        $response = $this->get('/api/v1/travels/' .$travel->slug.'/tours');
+        $response = $this->get('/api/travels/' .$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'data');
@@ -57,7 +57,7 @@ class TourListTest extends TestCase
 
         Tour::factory(16)->create(['travel_id' => $travel->id]);
 
-        $response = $this->get('/api/v1/travels/' .$travel->slug.'/tours');
+        $response = $this->get('/api/travels/' .$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(15, 'data');
@@ -81,7 +81,7 @@ class TourListTest extends TestCase
         ]);
 
 
-        $response = $this->get('/api/v1/travels/'.$travel->slug.'/tours');
+        $response = $this->get('/api/travels/'.$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.0.id', $earlierTour->id);
@@ -112,7 +112,7 @@ class TourListTest extends TestCase
         ]);
 
 
-        $response = $this->get('/api/v1/travels/'.$travel->slug.'/tours?sortBy=price&sortOrder=asc');
+        $response = $this->get('/api/travels/'.$travel->slug.'/tours?sortBy=price&sortOrder=asc');
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.0.id', $cheapEarlierTour->id);
@@ -134,7 +134,7 @@ class TourListTest extends TestCase
             'price' => 100
         ]);
 
-        $endpoint = '/api/v1/travels/'.$travel->slug.'/tours';
+        $endpoint = '/api/travels/'.$travel->slug.'/tours';
 
         $response = $this->get($endpoint.'?priceFrom=100');
         $response->assertJsonCount(2, 'data');
@@ -185,7 +185,7 @@ class TourListTest extends TestCase
             'ending_date' => now()->addDays(1)
         ]);
 
-        $endpoint = '/api/v1/travels/'.$travel->slug.'/tours';
+        $endpoint = '/api/travels/'.$travel->slug.'/tours';
 
 
         $response = $this->get($endpoint.'?dateFrom='.now());
@@ -226,10 +226,10 @@ class TourListTest extends TestCase
     {
         $travel= Travel::factory()->create();
 
-        $response = $this->getJson('/api/v1/travels/'.$travel->slug.'/tours?dateFrom=abcde');
+        $response = $this->getJson('/api/travels/'.$travel->slug.'/tours?dateFrom=abcde');
         $response->assertStatus(422);
 
-        $response = $this->getJson('/api/v1/travels/'.$travel->slug.'/tours?priceFrom=abcde');
+        $response = $this->getJson('/api/travels/'.$travel->slug.'/tours?priceFrom=abcde');
         $response->assertStatus(422);
     }
 }

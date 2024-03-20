@@ -22,7 +22,7 @@ class AdminTravelTest extends TestCase
 
     public function test_public_user_cannot_access_adding_travel(): void
     {
-        $response = $this->postJson('/api/v1/travels');
+        $response = $this->postJson('/api/travels');
 
         $response->assertStatus(401);
     }
@@ -33,7 +33,7 @@ class AdminTravelTest extends TestCase
         $user = User::factory()->create();
         $user->roles()->attach(Role::where('name', 'editor')->value('id'));
 
-        $response = $this->actingAs($user)->postJson('/api/v1/travels');
+        $response = $this->actingAs($user)->postJson('/api/travels');
 
         $response->assertStatus(403);
     }
@@ -44,13 +44,13 @@ class AdminTravelTest extends TestCase
         $user = User::factory()->create();
         $user->roles()->attach(Role::where('name', 'admin')->value('id'));
 
-        $response = $this->actingAs($user)->postJson('/api/v1/travels', [
+        $response = $this->actingAs($user)->postJson('/api/travels', [
             'name' => 'Travel name',
         ]);
 
         $response->assertStatus(422);
 
-        $response = $this->actingAs($user)->postJson('/api/v1/travels', [
+        $response = $this->actingAs($user)->postJson('/api/travels', [
             'name' => 'Travel name',
             'is_public' => 1,
             'description' => 'Another travel description',
@@ -59,7 +59,7 @@ class AdminTravelTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response = $this->get('/api/v1/travels');
+        $response = $this->get('/api/travels');
         $response->assertJsonFragment(['name' => 'Travel name']);
     }
 }

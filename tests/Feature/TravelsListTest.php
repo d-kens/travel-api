@@ -11,13 +11,13 @@ class TravelsListTest extends TestCase
 {
     use RefreshDatabase;
 
-    // http://127.0.0.1:8000/api/v1/travels?page=2&page_size=2
+    // http://127.0.0.1:8000/api/travels?page=2&page_size=2
 
     public function test_travel_list_returns_paginated_data_correctly_15_per_page(): void
     {
         Travel::factory(47)->create(['is_public' => true]);
 
-        $response = $this->get('/api/v1/travels');
+        $response = $this->get('/api/travels');
 
         $response->assertStatus(200);
 
@@ -33,7 +33,7 @@ class TravelsListTest extends TestCase
         $page = 2;
         $page_size = 10;
 
-        $response = $this->get('api/v1/travels?page='.$page.'&page_size='.$page_size);
+        $response = $this->get('api/travels?page='.$page.'&page_size='.$page_size);
 
         $response->assertStatus(200);
 
@@ -54,7 +54,7 @@ class TravelsListTest extends TestCase
         $publicTravel = Travel::factory()->create(['is_public' => true]);
         Travel::factory()->create(['is_public' => false]);
 
-        $response = $this->get('/api/v1/travels');
+        $response = $this->get('/api/travels');
 
         $response->assertStatus(200);
 

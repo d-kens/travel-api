@@ -22,7 +22,7 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson('/api/v1/login', [
+        $response = $this->postJson('/api/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -34,7 +34,7 @@ class LoginTest extends TestCase
 
     public function test_login_return_error_with_invalid_credentials():void
     {
-        $response = $this->postJson('/api/v1/login', [
+        $response = $this->postJson('/api/login', [
             'email' => "nonexisting@gmail.com",
             'password' => 'password',
         ]);
